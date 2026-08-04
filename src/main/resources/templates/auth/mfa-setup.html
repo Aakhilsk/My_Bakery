@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup MFA - MyBakery Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .mfa-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .mfa-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .mfa-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .mfa-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .alert-info {
+            background-color: #e7f3ff;
+            color: #004085;
+            border: 1px solid #b3d9ff;
+        }
+
+        .alert-error {
+            background-color: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        .alert-success {
+            background-color: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+
+        .mfa-steps {
+            margin-bottom: 30px;
+        }
+
+        .step {
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #333;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .step-content {
+            margin-left: 40px;
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .qr-code img {
+            max-width: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+        }
+
+        .secret-key {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="number"] {
+            font-size: 24px;
+            letter-spacing: 5px;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffc107;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mfa-container">
+        <div class="mfa-header">
+            <h1>🔐 Setup Two-Factor Authentication</h1>
+            <p>Secure your admin account with MFA</p>
+        </div>
+
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div th:if="${secret}" class="mfa-steps">
+            <div class="alert alert-info">
+                <strong>Important:</strong> Save your recovery key in a safe place. If you lose access to your authenticator app, you won't be able to login.
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-title">Download an Authenticator App</span>
+                <div class="step-content">
+                    Install Google Authenticator, Microsoft Authenticator, Authy, or any TOTP-compatible app on your phone.
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-title">Scan QR Code</span>
+                <div class="step-content">
+                    Open your authenticator app and scan this QR code:
+                    <div class="qr-code">
+                        <img th:if="${qrCodeDataUrl}" th:src="${qrCodeDataUrl}" alt="QR Code for MFA setup">
+                        <p th:if="!${qrCodeDataUrl}" style="color: #999; padding: 20px;">QR Code generation failed. Use manual entry below.</p>
+                    </div>
+                    Or enter this key manually:
+                    <div class="secret-key" th:text="${secret}"></div>
+                </div>
+            </div>
+
+            <form method="POST" th:action="@{/auth/mfa/enable}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="secret" th:value="${secret}">
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span class="step-title">Verify Setup</span>
+                    <div class="step-content">
+                        Enter the 6-digit code from your authenticator app:
+                        <div class="form-group" style="margin-top: 10px;">
+                            <input type="number" name="code" placeholder="000000" min="0" max="999999" required autofocus>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <a href="/admin/products" class="btn-secondary" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">Cancel</a>
+                    <button type="submit" class="btn-primary">Verify & Enable MFA</button>
+                </div>
+            </form>
+        </div>
+
+        <div th:unless="${secret}" class="mfa-steps">
+            <div class="alert alert-success">
+                ✓ MFA is already enabled for your account.
+            </div>
+            <div class="button-group">
+                <a href="/admin/products" class="btn-primary" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">Back to Admin</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-format the code input
+        const codeInput = document.querySelector('input[name="code"]');
+        if (codeInput) {
+            codeInput.addEventListener('input', function(e) {
+                if (this.value.length > 6) {
+                    this.value = this.value.slice(0, 6);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

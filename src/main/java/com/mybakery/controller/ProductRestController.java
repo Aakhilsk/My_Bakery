@@ -33,13 +33,13 @@ public class ProductRestController {
     /** GET /api/products — list all products. */
     @GetMapping
     public List<Product> getAllProducts() {
-        return productService.findAll();
+        return productService.findAvailable();
     }
 
     /** GET /api/products/{id} — get one product by ID. */
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
-        return productService.findById(id);
+        return productService.findAvailableById(id);
     }
 
     /** POST /api/products — create a new product. Returns 201 Created. */

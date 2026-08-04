@@ -64,6 +64,41 @@ body {
     gap: 1rem;
 }
 
+.admin-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.user-menu {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+}
+
+.user-info {
+    color: white;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    padding-right: 0.75rem;
+}
+
+.mfa-badge {
+    background: rgba(34, 197, 94, 0.3);
+    color: #86efac;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-left: 0.25rem;
+}
+
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -176,6 +211,30 @@ body {
 
 .status.unavailable {
     color: var(--color-muted);
+}
+
+.availability-toggle {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.availability-toggle.is-available {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.availability-toggle.is-unavailable {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.availability-toggle:hover {
+    filter: brightness(0.94);
 }
 
 .actions {

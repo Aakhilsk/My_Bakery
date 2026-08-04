@@ -58,6 +58,13 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
     }
 
+    /** Finds a public product without exposing items that are not for sale. */
+    @Transactional(readOnly = true)
+    public Product findAvailableById(Long id) {
+        return productRepository.findByIdAndAvailableTrue(id)
+                .orElseThrow(() -> new ProductNotFoundException("Available product not found with id: " + id));
+    }
+
     /** Persists a new product or updates an existing one. */
     public Product save(Product product) {
         return productRepository.save(product);
@@ -80,6 +87,13 @@ public class ProductService {
         }
 
         return productRepository.save(existing);
+    }
+
+    /** Flips whether a product is visible on the public storefront. */
+    public Product toggleAvailability(Long id) {
+        Product product = findById(id);
+        product.setAvailable(!product.isAvailable());
+        return productRepository.save(product);
     }
 
     /** Deletes a product by ID after verifying it exists. */
