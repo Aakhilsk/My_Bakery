@@ -6,6 +6,13 @@
     <meta name="description" content="My Bakery — Fresh bread, pastries, and cakes baked daily with love.">
     <title>My Bakery — Fresh Baked Daily</title>
     <link rel="stylesheet" th:href="@{/css/storefront.css}">
+    <script>
+        (() => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.dataset.theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -20,6 +27,10 @@
                 <li><a href="#about">About Us</a></li>
                 <li><a href="#visit">Visit Us</a></li>
             </ul>
+            <button type="button" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+                <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+                <span class="theme-toggle-label">Dark mode</span>
+            </button>
         </div>
     </nav>
 
@@ -169,6 +180,25 @@
             <p class="footer-tagline">Baked fresh. Served with a smile.</p>
         </div>
     </footer>
+
+    <script>
+        (() => {
+            const toggle = document.querySelector('.theme-toggle');
+            const updateToggle = () => {
+                const dark = document.documentElement.dataset.theme === 'dark';
+                toggle.setAttribute('aria-pressed', String(dark));
+                toggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+                toggle.querySelector('.theme-toggle-icon').textContent = dark ? '☀' : '☾';
+                toggle.querySelector('.theme-toggle-label').textContent = dark ? 'Light mode' : 'Dark mode';
+            };
+            toggle.addEventListener('click', () => {
+                document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+                localStorage.setItem('theme', document.documentElement.dataset.theme);
+                updateToggle();
+            });
+            updateToggle();
+        })();
+    </script>
 
 </body>
 </html>

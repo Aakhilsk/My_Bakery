@@ -27,4 +27,4 @@ Thumbs.db
 
 # Environment secrets (never commit real passwords)
 .env
-application-local.properties
+uploads/

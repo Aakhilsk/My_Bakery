@@ -16,6 +16,17 @@
     --font-body: "Source Sans 3", "Segoe UI", sans-serif;
 }
 
+:root[data-theme="dark"] {
+    --color-primary: #f59e0b;
+    --color-primary-light: #fbbf24;
+    --color-cream: #2a2019;
+    --color-warm-white: #18120e;
+    --color-brown: #f9eadc;
+    --color-brown-muted: #d4c0ae;
+    --color-border: #5b4535;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -84,6 +95,26 @@ body {
     color: var(--color-primary);
 }
 
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-brown);
+    padding: 0.4rem 0.7rem;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
 /* --- Hero --- */
 .hero {
     position: relative;
@@ -137,6 +168,29 @@ body {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     border: 1px solid var(--color-border);
+}
+
+:root[data-theme="dark"] .nav {
+    background: rgba(24, 18, 14, 0.95);
+}
+
+:root[data-theme="dark"] .hero-highlight-copy,
+:root[data-theme="dark"] .feature-card,
+:root[data-theme="dark"] .product-card {
+    background: #241a14;
+}
+
+:root[data-theme="dark"] .site-footer {
+    background: #100b08;
+}
+
+:root[data-theme="dark"] .visit {
+    background: #100b08;
+    color: #f9eadc;
+}
+
+:root[data-theme="dark"] .visit h2 {
+    color: #f9eadc;
 }
 
 .hero-highlight-copy h2 {
@@ -384,16 +438,16 @@ body {
 
 /* --- Visit --- */
 .visit {
-    background: var(--color-brown);
-    color: white;
+    background: var(--color-cream);
+    color: var(--color-brown);
 }
 
 .visit .section-label {
-    color: var(--color-primary-light);
+    color: var(--color-primary);
 }
 
 .visit h2 {
-    color: white;
+    color: var(--color-brown);
 }
 
 .visit-grid {
@@ -439,6 +493,30 @@ body {
     flex-wrap: wrap;
     gap: 1rem;
     font-size: 0.9rem;
+}
+
+/* Keep the contact section readable in both color schemes. These rules live
+   after the base Visit styles so they cannot be overridden by them. */
+html[data-theme="light"] .visit {
+    background: #fef7ed;
+    color: #3d2314;
+}
+
+html[data-theme="light"] .visit h2,
+html[data-theme="light"] .visit p,
+html[data-theme="light"] .visit strong {
+    color: #3d2314;
+}
+
+html[data-theme="dark"] .visit {
+    background: #100b08;
+    color: #f9eadc;
+}
+
+html[data-theme="dark"] .visit h2,
+html[data-theme="dark"] .visit p,
+html[data-theme="dark"] .visit strong {
+    color: #f9eadc;
 }
 
 .footer-tagline {

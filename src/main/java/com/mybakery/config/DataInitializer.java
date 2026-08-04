@@ -5,6 +5,7 @@ import com.mybakery.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
  * Runs only when the products table is empty so restarts do not duplicate data.
  */
 @Configuration
+@Profile("local")
 public class DataInitializer {
 
     @Bean

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Verify MFA - MyBakery</title></head>
+<body><main>
+    <h1>Verify your sign-in</h1><p>Enter the six-digit code from your authenticator app.</p>
+    <p th:if="${error}" th:text="${error}" role="alert"></p>
+    <form th:action="@{/auth/mfa/verify}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <label for="code">Authenticator code</label>
+        <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required autofocus>
+        <button type="submit">Verify</button>
+    </form>
+    <form th:action="@{/auth/logout}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button type="submit">Cancel and sign out</button></form>
+</main></body></html>

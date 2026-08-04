@@ -15,7 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // Optional: additional view mappings can be registered here
+        registry.addRedirectViewController("/admin", "/admin/products");
+        registry.addRedirectViewController("/admin/", "/admin/products");
     }
 
     @Override
